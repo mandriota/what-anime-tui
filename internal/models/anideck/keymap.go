@@ -10,6 +10,7 @@ type KeyMap struct {
 	AltScreen key.Binding
 	Search    key.Binding
 	Focus     key.Binding
+	Blur      key.Binding
 	Help      key.Binding
 	Quit      key.Binding
 }
@@ -20,8 +21,8 @@ func (k KeyMap) ShortHelp() []key.Binding {
 
 func (k KeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
-		{k.Help, k.Quit, k.Focus, k.Search},
-		{k.AltScreen, k.Paginator.PrevPage, k.Paginator.NextPage},
+		{k.Help, k.Quit, k.Search, k.AltScreen},
+		{k.Focus, k.Blur, k.Paginator.PrevPage, k.Paginator.NextPage},
 	}
 }
 
@@ -37,23 +38,27 @@ var DefaultKeyMap = KeyMap{
 		),
 	},
 	AltScreen: key.NewBinding(
-		key.WithKeys(" "),
-		key.WithHelp("space", "Toggle AltScreen"),
+		key.WithKeys("ctrl+s"),
+		key.WithHelp("ctrl+s", "Toggle AltScreen"),
 	),
 	Search: key.NewBinding(
 		key.WithKeys("enter"),
 		key.WithHelp("enter", "Search"),
 	),
 	Focus: key.NewBinding(
-		key.WithKeys("tab"),
-		key.WithHelp("tab", "Switch Focus"),
+		key.WithKeys("j"),
+		key.WithHelp("j", "Form Focus"),
+	),
+	Blur: key.NewBinding(
+		key.WithKeys("esc"),
+		key.WithHelp("esc", "Form Blur"),
 	),
 	Help: key.NewBinding(
-		key.WithKeys("?"),
-		key.WithHelp("?", "Toggle Help"),
+		key.WithKeys("ctrl+g"),
+		key.WithHelp("ctrl+g", "Toggle Help"),
 	),
 	Quit: key.NewBinding(
-		key.WithKeys("ctrl+c", "ctrl+q", "esc"),
-		key.WithHelp("ctrl+c/ctrl+q/esc", "Quit"),
+		key.WithKeys("ctrl+c", "ctrl+q"),
+		key.WithHelp("ctrl+c/ctrl+q", "Quit"),
 	),
 }

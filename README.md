@@ -1,5 +1,5 @@
 # What Anime TUI
-An TUI alternative to https://github.com/irevenko/what-anime-cli.
+A TUI alternative to https://github.com/irevenko/what-anime-cli.
 
 ## Showcase
 https://github.com/mandriota/what-anime-tui/assets/62650188/ffd9a1b9-bc64-4d8f-90d9-c519c84b32eb
