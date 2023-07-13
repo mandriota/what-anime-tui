@@ -2,7 +2,7 @@
 A TUI alternative to https://github.com/irevenko/what-anime-cli.
 
 ## Showcase
-https://github.com/mandriota/what-anime-tui/assets/62650188/319602cf-a816-4b14-a75e-b1cf6339920d
+https://github.com/mandriota/what-anime-tui/assets/62650188/17b4f330-aede-4dae-a6af-f81b4fd52d18
 
 ## Installation
 
