@@ -1,4 +1,4 @@
-package anideck
+package gallery
 
 import (
 	"strings"
@@ -9,8 +9,10 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/mandriota/what-anime-tui/internal/fetcher"
 	"github.com/muesli/termenv"
+
+	"github.com/mandriota/what-anime-tui/internal/ascii"
+	"github.com/mandriota/what-anime-tui/internal/fetcher"
 )
 
 const (
@@ -157,9 +159,9 @@ func (m Model) View() string {
 	s := m.textInput.View() + "\n"
 	switch {
 	case m.searching:
-		s += m.styleWidget.Render(m.styleStatePanel.Render("⧖ SEARCHING ..."))
+		s += m.styleWidget.Render(m.styleStatePanel.Render("⧖ SEARCHING ...\n" + ascii.ArtTelescope + "\n"))
 	case len(m.response.Result) == 0:
-		s += m.styleWidget.Render(m.styleStatePanel.Render("✘ NO RESULTS ✘"))
+		s += m.styleWidget.Render(m.styleStatePanel.Render("✘ NO RESULTS ✘\n" + ascii.ArtNoResults + "\n"))
 	default:
 		s += m.styleWidget.Render(m.styleStatePanel.Render(m.paginator.View()) + "\n" +
 			styleCard.Render(m.response.Result[m.paginator.Page].View()) + "\n")

@@ -1,10 +1,11 @@
-package anideck
+package gallery
 
 import (
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/paginator"
 )
 
+// TODO: divide KeyMap in SearchMap, GalleryMap and GlobalMap structs
 type KeyMap struct {
 	Paginator paginator.KeyMap
 	AltScreen key.Binding
