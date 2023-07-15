@@ -16,3 +16,13 @@ Enter the following command in your terminal to find go/bin directory:
 ```
 echo `go env GOPATH`/bin
 ```
+
+## Configuration
+Config is read from `$HOME/.config/wat/wat.toml`
+
+### Default config:
+```toml
+[appearance]
+# Background ANSI Color. Must be from 0 to 15.
+background = 6
+```
