@@ -86,6 +86,7 @@ func New(path string) Model {
 		Bold(true).
 		Render("•")
 	am.paginator.InactiveDot = styleBase.Copy().
+		Faint(true).
 		Render("•")
 
 	return am
