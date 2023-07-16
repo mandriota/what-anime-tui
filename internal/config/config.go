@@ -27,7 +27,7 @@ var Global = struct {
 		Background: lipgloss.Color(termenv.ANSICyan.String()),
 		Foreground: lipgloss.Color(termenv.ANSIWhite.String()),
 		Border: border{
-			Foreground: lipgloss.Color(termenv.ANSIBlue.String()),
+			Foreground: lipgloss.Color(termenv.ANSIWhite.String()),
 		},
 	},
 }
