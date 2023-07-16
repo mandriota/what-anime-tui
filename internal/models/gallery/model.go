@@ -24,7 +24,8 @@ const (
 
 var (
 	styleBase = lipgloss.NewStyle().
-			Background(config.Global.Appearance.Background)
+			Background(config.Global.Appearance.Background).
+			Foreground(config.Global.Appearance.Foreground)
 	styleCard = lipgloss.NewStyle().
 			PaddingLeft(4)
 	styleGallery = lipgloss.NewStyle().
@@ -189,7 +190,7 @@ func (m Model) View() string {
 		deck = m.styleStatePanel.Render("NO RESULTS\n" + ascii.ArtNoResults)
 	default:
 		deck = m.styleStatePanel.Render(m.paginator.View()) + "\n" +
-			styleCard.Render(m.response.Result[m.paginator.Page].View())
+			styleCard.Render(m.response.Result[m.paginator.Page].View()+"\n")
 	}
 
 	return styleGallery.Render(m.textInput.View()+"\n"+

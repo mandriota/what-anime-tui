@@ -24,6 +24,12 @@ Config is read from `$HOME/.config/wat/wat.toml`
 ### Default config:
 ```toml
 [appearance]
-# Background ANSI Color. Must be from 0 to 15.
-background = 6
+# Specifies background color by hex or ANSI value.
+# Examples:
+# background = "#0F0"
+# background = "#FF006F"
+# background = "6"
+background = "6"
+# Specifies foreground color by hex or ANSI value.
+foreground = "15"
 ```

@@ -11,14 +11,16 @@ import (
 )
 
 type appearance struct {
-	Background lipgloss.ANSIColor
+	Background lipgloss.Color
+	Foreground lipgloss.Color
 }
 
 var Global = struct {
 	Appearance appearance
 }{
 	Appearance: appearance{
-		Background: lipgloss.ANSIColor(termenv.ANSICyan),
+		Background: lipgloss.Color(termenv.ANSICyan.String()),
+		Foreground: lipgloss.Color(termenv.ANSIWhite.String()),
 	},
 }
 
