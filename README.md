@@ -29,7 +29,11 @@ Config is read from `$HOME/.config/wat/wat.toml`
 # background = "#0F0"
 # background = "#FF006F"
 # background = "6"
-background = "6"
+background = "#FF006F"
 # Specifies foreground color by hex or ANSI value.
 foreground = "15"
+
+[appearance.border]
+# Specifies border foreground color by hex or ANSI value.
+foreground = "#3939CF"
 ```

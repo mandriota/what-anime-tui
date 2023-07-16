@@ -68,6 +68,7 @@ func New(path string) Model {
 		help: help.New(),
 		styleDeck: styleBase.Copy().
 			Border(lipgloss.ThickBorder(), true, false, false, false).
+			BorderTopForeground(config.Global.Appearance.Border.Foreground).
 			Height(10).
 			Bold(true),
 		styleStatePanel: styleBase.Copy().

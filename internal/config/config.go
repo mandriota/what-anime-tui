@@ -10,9 +10,14 @@ import (
 	"github.com/pelletier/go-toml/v2"
 )
 
+type border struct {
+	Foreground lipgloss.Color
+}
+
 type appearance struct {
 	Background lipgloss.Color
 	Foreground lipgloss.Color
+	Border     border
 }
 
 var Global = struct {
@@ -21,6 +26,9 @@ var Global = struct {
 	Appearance: appearance{
 		Background: lipgloss.Color(termenv.ANSICyan.String()),
 		Foreground: lipgloss.Color(termenv.ANSIWhite.String()),
+		Border: border{
+			Foreground: lipgloss.Color(termenv.ANSIBlue.String()),
+		},
 	},
 }
 
