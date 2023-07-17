@@ -59,7 +59,7 @@ var DefaultKeyMap = KeyMap{
 		key.WithHelp("ctrl+g", "Toggle Help"),
 	),
 	Quit: key.NewBinding(
-		key.WithKeys("ctrl+c", "ctrl+q"),
-		key.WithHelp("ctrl+c/ctrl+q", "Quit"),
+		key.WithKeys("ctrl+c"),
+		key.WithHelp("ctrl+c", "Quit"),
 	),
 }

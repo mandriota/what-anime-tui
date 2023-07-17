@@ -67,9 +67,10 @@ func New(path string) Model {
 		})),
 		help: help.New(),
 		styleDeck: styleBase.Copy().
-			Border(lipgloss.ThickBorder(), true, false, false, false).
-			BorderTopForeground(config.Global.Appearance.Border.Foreground).
 			Height(10).
+			BorderTopForeground(config.Global.Appearance.Border.Foreground).
+			BorderStyle(lipgloss.ThickBorder()).
+			BorderTop(true).
 			Bold(true),
 		styleStatePanel: styleBase.Copy().
 			Align(lipgloss.Center),
@@ -82,13 +83,13 @@ func New(path string) Model {
 	am.textInput.Focus()
 
 	am.paginator = paginator.New()
-	am.paginator.KeyMap = am.KeyMap.Paginator
 	am.paginator.Type = paginator.Dots
-	am.paginator.ActiveDot = styleBase.Copy().
-		Bold(true).
-		Render("•")
+	am.paginator.KeyMap = am.KeyMap.Paginator
 	am.paginator.InactiveDot = styleBase.Copy().
 		Faint(true).
+		Render("•")
+	am.paginator.ActiveDot = styleBase.Copy().
+		Bold(true).
 		Render("•")
 
 	return am
