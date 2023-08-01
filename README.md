@@ -8,14 +8,20 @@ https://github.com/mandriota/what-anime-tui/assets/62650188/fc0a4aca-0e20-43b0-a
 ## Installation
 
 Download and install Go from [go.dev](https://go.dev), then enter the following command in your terminal:
-```
+```sh
 go install github.com/mandriota/what-anime-tui@latest
 ```
 
 You may also need to add `go/bin` directory to `PATH` environment variable.
 Enter the following command in your terminal to find `go/bin` directory:
-```
+```sh
 echo `go env GOPATH`/bin
+```
+
+### Using Homebrew
+```sh
+brew tap mandriota/mandriota
+brew install what-anime-tui
 ```
 
 ## Configuration
