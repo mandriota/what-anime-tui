@@ -24,6 +24,11 @@ brew tap mandriota/mandriota
 brew install what-anime-tui
 ```
 
+### Using npm
+```sh
+npm i what-anime-tui
+```
+
 ## Configuration
 Config is read from `$HOME/.config/wat/wat.toml`
 
