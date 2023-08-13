@@ -14,21 +14,34 @@ type border struct {
 	Foreground lipgloss.Color
 }
 
-type appearance struct {
+type AppearanceConfig struct {
 	Background lipgloss.Color
 	Foreground lipgloss.Color
 	Border     border
 }
 
-var Global = struct {
-	Appearance appearance
-}{
-	Appearance: appearance{
+// Warning: this fetcher config is not stable and may be changed in future releases.
+type FetcherConfig struct {
+	ApiUrlByUrl  string
+	ApiUrlByFile string
+}
+
+type GeneralConfig struct {
+	Appearance AppearanceConfig
+	Fetcher FetcherConfig
+}
+
+var Global = GeneralConfig{
+	Appearance: AppearanceConfig{
 		Background: lipgloss.Color(termenv.ANSICyan.String()),
 		Foreground: lipgloss.Color(termenv.ANSIWhite.String()),
 		Border: border{
 			Foreground: lipgloss.Color(termenv.ANSIWhite.String()),
 		},
+	},
+	Fetcher: FetcherConfig{
+		ApiUrlByUrl: `https://api.trace.moe/search?anilistInfo&url={{ .Path }}`,
+		ApiUrlByFile: `https://api.trace.moe/search?anilistInfo`,
 	},
 }
 

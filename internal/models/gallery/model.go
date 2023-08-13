@@ -17,23 +17,38 @@ import (
 	"github.com/mandriota/what-anime-tui/internal/fetcher"
 )
 
-const (
-	APIBaseURL        = `https://api.trace.moe/search?anilistInfo`
-	APIByURLParameter = `&url=`
-)
-
-var (
-	styleBase = lipgloss.NewStyle().
-			Background(config.Global.Appearance.Background).
-			Foreground(config.Global.Appearance.Foreground)
-	styleCard = lipgloss.NewStyle().
-			PaddingLeft(4)
-	styleGallery = lipgloss.NewStyle().
-			Padding(1, 0, 1, 0)
-)
-
 type searchFinishedMsg struct {
 	err error
+}
+
+type style struct {
+	base       lipgloss.Style
+	card       lipgloss.Style
+	gallery    lipgloss.Style
+	deck       lipgloss.Style
+	statePanel lipgloss.Style
+}
+
+func newStyle(cfg config.AppearanceConfig) style {
+	base := lipgloss.NewStyle().
+		Background(cfg.Background).
+		Foreground(cfg.Foreground)
+	
+	return style{
+		base: base,
+		card: lipgloss.NewStyle().
+			PaddingLeft(4),
+		gallery: lipgloss.NewStyle().
+			Padding(1, 0, 1, 0),
+		deck: base.Copy().
+			Height(10).
+			BorderTopForeground(cfg.Border.Foreground).
+			BorderStyle(lipgloss.ThickBorder()).
+			BorderTop(true).
+			Bold(true),
+		statePanel: base.Copy().
+			Align(lipgloss.Center),
+	}
 }
 
 type Model struct {
@@ -52,13 +67,14 @@ type Model struct {
 
 	err error
 
-	styleDeck       lipgloss.Style
-	styleStatePanel lipgloss.Style
+	style style
+
+	cfg config.GeneralConfig
 }
 
-func New(path string) Model {
+func New(cfg config.GeneralConfig, path string) Model {
 	am := Model{
-		fetcher:  fetcher.New(),
+		fetcher:  fetcher.New(cfg.Fetcher),
 		response: new(fetcher.Response),
 		KeyMap:   DefaultKeyMap,
 		spinner: spinner.New(spinner.WithSpinner(spinner.Spinner{
@@ -66,14 +82,8 @@ func New(path string) Model {
 			FPS:    time.Millisecond * 1500 / time.Duration(len(ascii.ArtTelescope)),
 		})),
 		help: help.New(),
-		styleDeck: styleBase.Copy().
-			Height(10).
-			BorderTopForeground(config.Global.Appearance.Border.Foreground).
-			BorderStyle(lipgloss.ThickBorder()).
-			BorderTop(true).
-			Bold(true),
-		styleStatePanel: styleBase.Copy().
-			Align(lipgloss.Center),
+		style: newStyle(cfg.Appearance),
+		cfg: cfg,
 	}
 
 	am.textInput = textinput.New()
@@ -85,10 +95,10 @@ func New(path string) Model {
 	am.paginator = paginator.New()
 	am.paginator.Type = paginator.Dots
 	am.paginator.KeyMap = am.KeyMap.Paginator
-	am.paginator.InactiveDot = styleBase.Copy().
+	am.paginator.InactiveDot = am.style.base.Copy().
 		Faint(true).
 		Render("•")
-	am.paginator.ActiveDot = styleBase.Copy().
+	am.paginator.ActiveDot = am.style.base.Copy().
 		Bold(true).
 		Render("•")
 
@@ -128,9 +138,9 @@ func (m Model) Update(msg tea.Msg) (_ tea.Model, cmd tea.Cmd) {
 				func() tea.Msg {
 					switch {
 					case strings.HasPrefix(path, "http"):
-						m.err = m.fetcher.FetchByURL(m.response, APIBaseURL+APIByURLParameter+path)
+						m.err = m.fetcher.FetchByURL(m.response, path)
 					default:
-						m.err = m.fetcher.FetchByFile(m.response, APIBaseURL, path)
+						m.err = m.fetcher.FetchByFile(m.response, path)
 					}
 
 					return searchFinishedMsg{err: m.err}
@@ -161,8 +171,8 @@ func (m Model) Update(msg tea.Msg) (_ tea.Model, cmd tea.Cmd) {
 			return m, cmd
 		}
 	case tea.WindowSizeMsg:
-		m.styleDeck.Width(msg.Width)
-		m.styleStatePanel.Width(msg.Width)
+		m.style.deck.Width(msg.Width)
+		m.style.statePanel.Width(msg.Width)
 		m.help.Width = msg.Width
 		m.textInput.Width = msg.Width - 1
 		return m, nil
@@ -185,18 +195,18 @@ func (m Model) View() string {
 	deck := ""
 	switch {
 	case m.err != nil:
-		deck = m.styleStatePanel.Render(m.err.Error())
+		deck = m.style.statePanel.Render(m.err.Error())
 	case m.searching:
-		deck = m.styleStatePanel.Render("SEARCHING\n" + m.spinner.View())
+		deck = m.style.statePanel.Render("SEARCHING\n" + m.spinner.View())
 	case len(m.response.Result) == 0:
-		deck = m.styleStatePanel.Render("NO RESULTS\n" + ascii.ArtNoResults)
+		deck = m.style.statePanel.Render("NO RESULTS\n" + ascii.ArtNoResults)
 	default:
-		deck = m.styleStatePanel.Render(m.paginator.View()) + "\n" +
-			styleCard.Render(m.response.Result[m.paginator.Page].View()+"\n")
+		deck = m.style.statePanel.Render(m.paginator.View()) + "\n" +
+			m.style.card.Render(m.response.Result[m.paginator.Page].View()+"\n")
 	}
 
-	return styleGallery.Render(m.textInput.View()+"\n"+
-		m.styleDeck.Render(deck),
+	return m.style.gallery.Render(m.textInput.View()+"\n"+
+		m.style.deck.Render(deck),
 	) + "\n" +
 		m.help.View(m.KeyMap)
 }

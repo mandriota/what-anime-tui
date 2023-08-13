@@ -8,17 +8,24 @@ import (
 	"log"
 	"mime/multipart"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
+	"strings"
+
+	"github.com/mandriota/what-anime-tui/internal/config"
 )
 
 type Fetcher struct {
 	payload *bytes.Buffer
+	
+	cfg config.FetcherConfig
 }
 
-func New() Fetcher {
+func New(cfg config.FetcherConfig) Fetcher {
 	return Fetcher{
 		payload: bytes.NewBuffer(nil),
+		cfg: cfg,
 	}
 }
 
@@ -38,13 +45,13 @@ func decode(dst *Response, resp *http.Response) error {
 	return nil
 }
 
-func writeImagePayload(payload io.Writer, fs io.Reader, fpath string) (contentType string, err error) {
+func writeImagePayload(payload io.Writer, r io.Reader, fpath string) (contentType string, err error) {
 	mwriter := multipart.NewWriter(payload)
 	fImg, err := mwriter.CreateFormFile("image", filepath.Base(fpath))
 	if err != nil {
 		return "", fmt.Errorf("error while creating form file: %v", err)
 	}
-	if _, err := io.Copy(fImg, fs); err != nil {
+	if _, err := io.Copy(fImg, r); err != nil {
 		return "", fmt.Errorf("error while copying: %v", err)
 	}
 	if err := mwriter.Close(); err != nil {
@@ -53,7 +60,7 @@ func writeImagePayload(payload io.Writer, fs io.Reader, fpath string) (contentTy
 	return mwriter.FormDataContentType(), nil
 }
 
-func (f Fetcher) FetchByFile(dst *Response, api string, path string) error {
+func (f Fetcher) FetchByFile(dst *Response, path string) error {
 	fs, err := os.Open(path)
 	if err != nil {
 		return fmt.Errorf("error while openning file: %v", err)
@@ -66,7 +73,7 @@ func (f Fetcher) FetchByFile(dst *Response, api string, path string) error {
 		return fmt.Errorf("error while writing payload: %v", err)
 	}
 
-	resp, err := http.Post(api, contentType, f.payload)
+	resp, err := http.Post(f.cfg.ApiUrlByFile, contentType, f.payload)
 	if err != nil {
 		log.Fatalln("error while sending post request:", err)
 	}
@@ -74,8 +81,8 @@ func (f Fetcher) FetchByFile(dst *Response, api string, path string) error {
 	return decode(dst, resp)
 }
 
-func (f Fetcher) FetchByURL(dst *Response, url string) error {
-	resp, err := http.Get(url)
+func (f Fetcher) FetchByURL(dst *Response, path string) error {
+	resp, err := http.Get(strings.Replace(f.cfg.ApiUrlByUrl, "{{ .Path }}", url.QueryEscape(path), 1))
 	if err != nil {
 		return fmt.Errorf("error while fetching: %v", err)
 	}
