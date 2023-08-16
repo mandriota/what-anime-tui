@@ -179,6 +179,7 @@ func (m Model) Update(msg tea.Msg) (_ tea.Model, cmd tea.Cmd) {
 	case searchFinishedMsg:
 		m.err = msg.err
 		m.paginator.SetTotalPages(len(m.response.Result))
+		m.paginator.Page = 0
 		m.searching = false
 	case spinner.TickMsg:
 		if !m.searching {
