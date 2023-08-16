@@ -47,4 +47,11 @@ foreground = "15"
 [appearance.border]
 # Specifies border foreground color by hex or ANSI value.
 foreground = "15"
+
+# Warning: this configuration parameter is unstable and can be changed at any moment
+[fetcher]
+# API URL to fetch by image/gif URL, which will be passed in the link in place of {{ .Path }}
+apiUrlByUrl = "https://api.trace.moe/search?anilistInfo&url={{ .Path }}"
+# API URL to fetch by image/gif file, which will be passed in "image" field in multipart
+apiUrlByFile = "https://api.trace.moe/search?anilistInfo"
 ```
