@@ -47,13 +47,13 @@ func init() {
 		return
 	}
 
-	path := filepath.Join(cfgDir, ".config", "wat", "wat.toml")
-	fs, err := os.Open(path)
+	fs, err := os.Open(filepath.Join(cfgDir, ".config", "wat", "wat.toml"))
 	if os.IsNotExist(err) {
 		return
 	}
 	if err != nil {
 		log.Println("failed to read configuration file")
+		return
 	}
 	defer fs.Close()
 
@@ -67,7 +67,6 @@ func main() {
 
 	p := tea.NewProgram(gallery.New(cfg, path))
 	if _, err := p.Run(); err != nil {
-		log.Fatalf("error while running UI: %v", err)
-		os.Exit(1)
+		log.Fatalln("error while running UI: ", err)
 	}
 }

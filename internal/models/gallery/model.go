@@ -205,8 +205,7 @@ func (m Model) Update(msg tea.Msg) (_ tea.Model, cmd tea.Cmd) {
 	return m, nil
 }
 
-func (m Model) View() string {
-	deck := ""
+func (m Model) View() (deck string) {
 	switch {
 	case m.err != nil:
 		deck = m.style.statePanel.Render(m.err.Error())
