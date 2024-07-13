@@ -53,7 +53,7 @@ func init() {
 	cfgDir := filepath.Join(homeDir, ".config", "wat", "wat.toml")
 
 	flag.StringVar(&cfgDir, "c", cfgDir, "path to the configuration file")
-	flag.BoolVar(&cliQuit, "q", false, "if set, program will be closed after finding result")
+	flag.BoolVar(&cliQuit, "q", false, "if set, program will be closed after finding first result")
 	flag.Parse()
 
 	fs, err := os.Open(cfgDir)
