@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//	http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,7 +32,7 @@ func decode(dst *Response, resp *http.Response) error {
 	if err := json.NewDecoder(resp.Body).Decode(&dst); err != nil {
 		return fmt.Errorf("error while decoding response: %v", err)
 	}
-	
+
 	if dst.Error != "" {
 		return fmt.Errorf("restAPI error: %s", dst.Error)
 	}
@@ -42,33 +42,33 @@ func decode(dst *Response, resp *http.Response) error {
 
 func writeImagePayload(payload io.Writer, r io.Reader, fpath string) (contentType string, err error) {
 	mwriter := multipart.NewWriter(payload)
-	
+
 	fImg, err := mwriter.CreateFormFile("image", filepath.Base(fpath))
 	if err != nil {
 		return "", fmt.Errorf("error while creating form file: %v", err)
 	}
-	
+
 	if _, err := io.Copy(fImg, r); err != nil {
 		return "", fmt.Errorf("error while copying: %v", err)
 	}
-	
+
 	if err := mwriter.Close(); err != nil {
 		return "", fmt.Errorf("error while closing multipart.Writer: %v", err)
 	}
-	
+
 	return mwriter.FormDataContentType(), nil
 }
 
 type Fetcher struct {
 	payload *bytes.Buffer
-	
+
 	cfg config.FetcherConfig
 }
 
 func New(cfg config.FetcherConfig) Fetcher {
 	return Fetcher{
 		payload: bytes.NewBuffer(nil),
-		cfg: cfg,
+		cfg:     cfg,
 	}
 }
 
@@ -80,7 +80,7 @@ func (f Fetcher) FetchByFile(dst *Response, path string) error {
 	defer fs.Close()
 
 	f.payload.Reset()
-	
+
 	contentType, err := writeImagePayload(f.payload, fs, path)
 	if err != nil {
 		return fmt.Errorf("error while writing payload: %v", err)
