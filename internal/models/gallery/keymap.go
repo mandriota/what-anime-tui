@@ -60,12 +60,12 @@ var DefaultKeyMap = KeyMap{
 		key.WithHelp("enter", "Search"),
 	),
 	Focus: key.NewBinding(
-		key.WithKeys("j"),
-		key.WithHelp("j", "Form Focus"),
+		key.WithKeys("up", "j"),
+		key.WithHelp("↑/j", "Form Focus"),
 	),
 	Blur: key.NewBinding(
-		key.WithKeys("esc"),
-		key.WithHelp("esc", "Form Blur"),
+		key.WithKeys("down", "esc"),
+		key.WithHelp("↓/esc", "Form Blur"),
 	),
 	Help: key.NewBinding(
 		key.WithKeys("ctrl+g"),
