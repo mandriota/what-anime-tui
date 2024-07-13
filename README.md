@@ -29,9 +29,22 @@ brew install what-anime-tui
 npm i what-anime-tui
 ```
 
+## Usage
+```sh
+what-anime-tui [-c=/path/to/your/config] [-q] [path]
+```
+Where
+- `-c` specifies the PATH to your configuration file
+- `-q`, if set, quits the program immediately after displaying first search result
+- `path` can be either URL or path to local file.
+
+These flags can be omitted and you can run:
+```sh
+what-anime-tui
+```
+
 ## Configuration
-By default config is read from `~/.config/wat/wat.toml`.
-> You can specify other config location by setting `-c` flag.
+By default config is read from `~/.config/wat/wat.toml` if `-c` flag is not set.
 
 ### Default config:
 ```toml
