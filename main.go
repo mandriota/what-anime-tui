@@ -14,6 +14,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"os"
 	"path/filepath"
@@ -42,12 +43,17 @@ var cfg = config.GeneralConfig{
 }
 
 func init() {
-	cfgDir, err := os.UserHomeDir()
+	homeDir, err := os.UserHomeDir()
 	if err != nil {
-		return
+		homeDir = "/"
 	}
 
-	fs, err := os.Open(filepath.Join(cfgDir, ".config", "wat", "wat.toml"))
+	cfgDir := filepath.Join(homeDir, ".config", "wat", "wat.toml")
+
+	flag.StringVar(&cfgDir, "c", cfgDir, "path to configuration file")
+	flag.Parse()
+
+	fs, err := os.Open(cfgDir)
 	if os.IsNotExist(err) {
 		return
 	}
@@ -63,7 +69,7 @@ func init() {
 }
 
 func main() {
-	path := strings.Join(os.Args[1:], " ")
+	path := strings.Join(flag.Args(), " ")
 
 	p := tea.NewProgram(gallery.New(cfg, path))
 	if _, err := p.Run(); err != nil {
