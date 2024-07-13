@@ -107,7 +107,7 @@ func New(cfg config.GeneralConfig, path string) Model {
 
 	am.paginator = paginator.New()
 	am.paginator.Type = paginator.Dots
-	am.paginator.KeyMap = am.KeyMap.Paginator
+	am.paginator.KeyMap = am.KeyMap.Gallery.Paginator
 	am.paginator.InactiveDot = am.style.base.Copy().
 		Faint(true).
 		Render("•")
@@ -158,9 +158,6 @@ func (m Model) Update(msg tea.Msg) (_ tea.Model, cmd tea.Cmd) {
 
 					return searchFinishedMsg{err: m.err}
 				})
-		case key.Matches(msg, m.KeyMap.Blur):
-			m.textInput.Blur()
-			return m, nil
 		case key.Matches(msg, m.KeyMap.Help):
 			m.help.ShowAll = !m.help.ShowAll
 		case key.Matches(msg, m.KeyMap.AltScreen):
@@ -172,14 +169,19 @@ func (m Model) Update(msg tea.Msg) (_ tea.Model, cmd tea.Cmd) {
 		}
 
 		if m.textInput.Focused() {
+			switch {
+			case key.Matches(msg, m.KeyMap.Form.Blur):
+				m.textInput.Blur()
+				return m, nil
+			}
 			m.textInput, cmd = m.textInput.Update(msg)
 			return m, cmd
 		}
 
 		switch {
-		case key.Matches(msg, m.KeyMap.Focus):
+		case key.Matches(msg, m.KeyMap.Gallery.Blur):
 			m.textInput.Focus()
-		case key.Matches(msg, m.KeyMap.Paginator.NextPage, m.KeyMap.Paginator.PrevPage):
+		case key.Matches(msg, m.KeyMap.Gallery.Paginator.NextPage, m.KeyMap.Gallery.Paginator.PrevPage):
 			m.paginator, cmd = m.paginator.Update(msg)
 			return m, cmd
 		}

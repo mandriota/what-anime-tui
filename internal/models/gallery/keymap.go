@@ -18,13 +18,20 @@ import (
 	"github.com/charmbracelet/bubbles/paginator"
 )
 
-// TODO: divide KeyMap in SearchMap, GalleryMap and GlobalMap structs
-type KeyMap struct {
+type KeyMapForm struct {
+	Blur key.Binding
+}
+
+type KeyMapGallery struct {
 	Paginator paginator.KeyMap
+	Blur      key.Binding
+}
+
+type KeyMap struct {
+	Form      KeyMapForm
+	Gallery   KeyMapGallery
 	AltScreen key.Binding
 	Search    key.Binding
-	Focus     key.Binding
-	Blur      key.Binding
 	Help      key.Binding
 	Quit      key.Binding
 }
@@ -36,19 +43,31 @@ func (k KeyMap) ShortHelp() []key.Binding {
 func (k KeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
 		{k.Help, k.Quit, k.Search, k.AltScreen},
-		{k.Focus, k.Blur, k.Paginator.PrevPage, k.Paginator.NextPage},
+		{k.Gallery.Blur, k.Form.Blur, k.Gallery.Paginator.PrevPage, k.Gallery.Paginator.NextPage},
 	}
 }
 
 var DefaultKeyMap = KeyMap{
-	Paginator: paginator.KeyMap{
-		NextPage: key.NewBinding(
-			key.WithKeys("right", "l"),
-			key.WithHelp("→/l", "Next Card"),
+	Form: KeyMapForm{
+		Blur: key.NewBinding(
+			key.WithKeys("down", "esc"),
+			key.WithHelp("↓/esc", "Form Blur"),
 		),
-		PrevPage: key.NewBinding(
-			key.WithKeys("left", "h"),
-			key.WithHelp("←/h", "Prev Card"),
+	},
+	Gallery: KeyMapGallery{
+		Paginator: paginator.KeyMap{
+			NextPage: key.NewBinding(
+				key.WithKeys("right", "l"),
+				key.WithHelp("→/l", "Next Card"),
+			),
+			PrevPage: key.NewBinding(
+				key.WithKeys("left", "h"),
+				key.WithHelp("←/h", "Prev Card"),
+			),
+		},
+		Blur: key.NewBinding(
+			key.WithKeys("up", "j"),
+			key.WithHelp("↑/j", "Form Focus"),
 		),
 	},
 	AltScreen: key.NewBinding(
@@ -58,14 +77,6 @@ var DefaultKeyMap = KeyMap{
 	Search: key.NewBinding(
 		key.WithKeys("enter"),
 		key.WithHelp("enter", "Search"),
-	),
-	Focus: key.NewBinding(
-		key.WithKeys("up", "j"),
-		key.WithHelp("↑/j", "Form Focus"),
-	),
-	Blur: key.NewBinding(
-		key.WithKeys("down", "esc"),
-		key.WithHelp("↓/esc", "Form Blur"),
 	),
 	Help: key.NewBinding(
 		key.WithKeys("ctrl+g"),
