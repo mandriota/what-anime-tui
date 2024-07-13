@@ -36,7 +36,7 @@ what-anime-tui [-c=/path/to/your/config] [-q] [path]
 Where
 - `-c` specifies the PATH to your configuration file
 - `-q`, if set, quits the program immediately after displaying first search result
-- `path` can be either URL or path to local file.
+- `path` can be either URL or path to local file
 
 These flags can be omitted and you can run:
 ```sh
