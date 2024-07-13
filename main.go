@@ -50,7 +50,7 @@ func init() {
 
 	cfgDir := filepath.Join(homeDir, ".config", "wat", "wat.toml")
 
-	flag.StringVar(&cfgDir, "c", cfgDir, "path to configuration file")
+	flag.StringVar(&cfgDir, "c", cfgDir, "path to the configuration file")
 	flag.Parse()
 
 	fs, err := os.Open(cfgDir)
