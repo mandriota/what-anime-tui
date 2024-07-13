@@ -58,7 +58,7 @@ func init() {
 		return
 	}
 	if err != nil {
-		log.Println("failed to read configuration file")
+		log.Println("failed to read the configuration file")
 		return
 	}
 	defer fs.Close()
