@@ -77,6 +77,7 @@ type Model struct {
 
 	altScreen bool
 	searching bool
+	cliQuit   bool
 
 	err error
 
@@ -85,7 +86,7 @@ type Model struct {
 	cfg config.GeneralConfig
 }
 
-func New(cfg config.GeneralConfig, path string) Model {
+func New(cfg config.GeneralConfig, cliQuit bool, path string) Model {
 	am := Model{
 		fetcher:  fetcher.New(cfg.Fetcher),
 		response: new(fetcher.Response),
@@ -94,9 +95,10 @@ func New(cfg config.GeneralConfig, path string) Model {
 			Frames: ascii.ArtTelescope,
 			FPS:    time.Millisecond * 1500 / time.Duration(len(ascii.ArtTelescope)),
 		})),
-		help:  help.New(),
-		style: newStyle(cfg.Appearance),
-		cfg:   cfg,
+		help:    help.New(),
+		style:   newStyle(cfg.Appearance),
+		cfg:     cfg,
+		cliQuit: cliQuit,
 	}
 
 	am.textInput = textinput.New()
@@ -145,8 +147,7 @@ func (m Model) Update(msg tea.Msg) (_ tea.Model, cmd tea.Cmd) {
 				return m, nil
 			}
 
-			m.searching = true
-			return m, tea.Sequence(
+			cmd = tea.Batch(
 				m.spinner.Tick,
 				func() tea.Msg {
 					switch {
@@ -157,7 +158,15 @@ func (m Model) Update(msg tea.Msg) (_ tea.Model, cmd tea.Cmd) {
 					}
 
 					return searchFinishedMsg{err: m.err}
-				})
+				},
+			)
+
+			if m.cliQuit {
+				cmd = tea.Sequence(cmd, tea.Quit)
+			}
+
+			m.searching = true
+			return m, cmd
 		case key.Matches(msg, m.KeyMap.Help):
 			m.help.ShowAll = !m.help.ShowAll
 		case key.Matches(msg, m.KeyMap.AltScreen):

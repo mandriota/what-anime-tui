@@ -42,6 +42,8 @@ var cfg = config.GeneralConfig{
 	},
 }
 
+var cliQuit = false
+
 func init() {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
@@ -51,6 +53,7 @@ func init() {
 	cfgDir := filepath.Join(homeDir, ".config", "wat", "wat.toml")
 
 	flag.StringVar(&cfgDir, "c", cfgDir, "path to the configuration file")
+	flag.BoolVar(&cliQuit, "q", false, "if set, program will be closed after finding result")
 	flag.Parse()
 
 	fs, err := os.Open(cfgDir)
@@ -71,7 +74,7 @@ func init() {
 func main() {
 	path := strings.Join(flag.Args(), " ")
 
-	p := tea.NewProgram(gallery.New(cfg, path))
+	p := tea.NewProgram(gallery.New(cfg, cliQuit, path))
 	if _, err := p.Run(); err != nil {
 		log.Fatalln("error while running UI: ", err)
 	}
