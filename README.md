@@ -30,7 +30,8 @@ npm i what-anime-tui
 ```
 
 ## Configuration
-Config is read from `$HOME/.config/wat/wat.toml`
+By default config is read from `~/.config/wat/wat.toml`.
+You can specify other config location by setting `-c` flag.
 
 ### Default config:
 ```toml
